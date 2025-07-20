@@ -1,0 +1,6 @@
+# Folders
+/node_modules
+/.git
+/scripts
+/dist
+tsconfig.json
