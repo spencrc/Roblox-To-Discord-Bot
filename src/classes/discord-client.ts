@@ -8,7 +8,7 @@ import {
 import { SlashCommand } from './slash-command.js';
 import { readdirSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
-import { DISCORD_TOKEN } from '../../config.js';
+import { DISCORD_TOKEN } from '../config.js';
 import { Event } from './event.js';
 
 export class DiscordClient extends Client {

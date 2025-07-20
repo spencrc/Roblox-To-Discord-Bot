@@ -1,4 +1,4 @@
-import { client } from './bot/client.js';
+import { client } from './client.js';
 import startExpressServer from './api/app.js';
 
 // Start Discord bot by loading all commands and events, then login using your client's token

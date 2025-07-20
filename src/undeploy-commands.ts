@@ -1,5 +1,5 @@
 import { REST, Routes } from 'discord.js';
-import { DISCORD_CLIENT_ID, DISCORD_TOKEN } from '../config.js';
+import { DISCORD_CLIENT_ID, DISCORD_TOKEN } from './config.js';
 
 const rest: REST = new REST().setToken(DISCORD_TOKEN);
 
