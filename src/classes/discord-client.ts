@@ -16,7 +16,7 @@ export class DiscordClient extends Client {
 
 	constructor() {
 		super({
-			intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
+			intents: [GatewayIntentBits.Guilds],
 			presence: {
 				activities: [
 					{
