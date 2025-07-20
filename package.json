@@ -1,30 +1,31 @@
 {
-  "name": "robloxverify",
-  "dependencies": {
-    "discord.js": "^14.21.0",
-    "dotenv": "^17.2.0",
-    "express": "^5.1.0"
-  },
-  "devDependencies": {
-    "@eslint/js": "^9.31.0",
-    "@types/express": "^5.0.3",
-    "eslint": "^9.31.0",
-    "nodemon": "^3.1.10",
-    "npm-run-all": "^4.1.5",
-    "typescript": "^5.8.3",
-    "typescript-eslint": "^8.37.0"
-  },
-  "type": "module",
-  "scripts": {
-    "build": "tsc",
-    "start": "node dist/server.js",
-    "dev:build": "tsc --watch --incremental",
-    "dev:start": "nodemon dist/server.js",
-    "dev": "run-p dev:*",
-    "deploy": "node dist/deploy-commands.js",
-    "undeploy": "node dist/undeploy-commands.js",
-    "lint": "eslint src/",
-    "format": "prettier . --check",
-    "format: fix": "prettier . --fix"
-  }
+	"name": "robloxverify",
+	"dependencies": {
+		"discord.js": "^14.21.0",
+		"dotenv": "^17.2.0",
+		"express": "^5.1.0"
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.31.0",
+		"@types/express": "^5.0.3",
+		"eslint": "^9.31.0",
+		"nodemon": "^3.1.10",
+		"npm-run-all": "^4.1.5",
+		"prettier": "^3.6.2",
+		"typescript": "^5.8.3",
+		"typescript-eslint": "^8.37.0"
+	},
+	"type": "module",
+	"scripts": {
+		"build": "tsc",
+		"start": "node dist/server.js",
+		"dev:build": "tsc --watch --incremental",
+		"dev:start": "nodemon dist/server.js",
+		"dev": "run-p dev:*",
+		"deploy": "node dist/deploy-commands.js",
+		"undeploy": "node dist/undeploy-commands.js",
+		"lint": "eslint src/",
+		"format": "prettier . --check",
+		"format:fix": "prettier . --write"
+	}
 }
