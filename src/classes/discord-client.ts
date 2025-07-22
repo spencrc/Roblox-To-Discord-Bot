@@ -31,8 +31,8 @@ export class DiscordClient extends Client {
 	}
 
 	public async load() {
-		const commandPath: string = './dist/bot/commands/';
-		const eventsPath: string = './dist/bot/events/';
+		const commandPath: string = './dist/commands/';
+		const eventsPath: string = './dist/events/';
 
 		for (const folder of readdirSync(commandPath)) {
 			const folderPath: string = commandPath + folder + '/';
