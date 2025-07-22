@@ -1,17 +1,12 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
 import { SlashCommand } from '../../classes/slash-command.js';
 import { ROBLOX_CLIENT_ID } from '../../config.js';
+import { createHash, randomBytes } from 'node:crypto';
 
-function makeid(length: number) {
-    let result = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const charactersLength = characters.length;
-    
-    for ( let i = 0; i < length; i++ ) {
-        result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    
-    return result;
+const AUTHORIZE_URL = 'https://apis.roblox.com/oauth/v1/authorize?';
+
+const sha256 = (buffer: string): Buffer => {
+  return createHash('sha256').update(buffer).digest();
 }
 
 export default new SlashCommand({
@@ -19,9 +14,19 @@ export default new SlashCommand({
 		.setName('verify')
 		.setDescription('Replies with a verify link!'),
 	execute: async (interaction: ChatInputCommandInteraction): Promise<void> => {
-        const redirect_uri = 'http://localhost:3000/redirect';
-        const code = makeid(10);
-        const link: string = `https://apis.roblox.com/oauth/v1/authorize?client_id=${ROBLOX_CLIENT_ID}&redirect_uri=${redirect_uri}&scope=openid+profile&response_type=code&state=${code}`;
-		await interaction.reply(`Please click [here](${link})!`);
-	}
+        const codeVerifier = randomBytes(32).toString('base64url');
+        const codeChallenge = sha256(codeVerifier).toString('base64url');
+        const code = randomBytes(10).toString('base64url');
+        const params = new URLSearchParams({
+            client_id: ROBLOX_CLIENT_ID,
+            code_challenge: codeChallenge,
+            code_challenge_method: 'S256',
+            redirect_uri: 'http://localhost:3000/redirect',
+            scope: 'openid profile',
+            response_type: 'code',
+            state: code
+        })
+        const link: string = `${AUTHORIZE_URL}${params.toString()}}`;
+		await interaction.reply(`Please click [here](<${link}>)!`);
+	} //todo: add state and code_challenge to a database to store them for use for /redirect
 });

@@ -26,6 +26,7 @@ const TOKEN_URL = 'https://apis.roblox.com/oauth/v1/token';
 const USER_INFO_URL = 'https://apis.roblox.com/oauth/v1/userinfo';
 const REVOKE_URL = 'https://apis.roblox.com/oauth/v1/token/revoke';
 
+//todo: add code_verifier to getToken params
 const getToken = async (code: string): Promise<TokenResponse> => {
     const params = new URLSearchParams();
     params.append('client_id', ROBLOX_CLIENT_ID);
@@ -73,6 +74,7 @@ const revokeRefreshToken = async (refreshToken: string): Promise<void> => {
     });
 }
 
+//todo: verify statecode
 export default router.get('/', async (req, res) => {
     const code = req.query.code as string;
     console.log("Sucess! Re-direct page was reached!");
