@@ -1,10 +1,4 @@
-import {
-	ActivityType,
-	Client,
-	ClientEvents,
-	Collection,
-	GatewayIntentBits
-} from 'discord.js';
+import { ActivityType, Client, ClientEvents, Collection, GatewayIntentBits } from 'discord.js';
 import { SlashCommand } from './slash-command.js';
 import { readdirSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
@@ -36,24 +30,18 @@ export class DiscordClient extends Client {
 
 		for (const folder of readdirSync(commandPath)) {
 			const folderPath: string = commandPath + folder + '/';
-			for (const file of readdirSync(folderPath).filter((file) =>
-				file.endsWith('.js')
-			)) {
+			for (const file of readdirSync(folderPath).filter((file) => file.endsWith('.js'))) {
 				const filePath: string = folderPath + file;
-				const command = (await import(pathToFileURL(filePath).href))
-					.default as SlashCommand;
+				const command = (await import(pathToFileURL(filePath).href)).default as SlashCommand;
 
 				this.commands.set(command.data.name, command);
 				console.log('Loaded new command:', file);
 			}
 		}
 
-		for (const file of readdirSync(eventsPath).filter((file) =>
-			file.endsWith('.js')
-		)) {
+		for (const file of readdirSync(eventsPath).filter((file) => file.endsWith('.js'))) {
 			const filePath: string = eventsPath + file;
-			const event = (await import(pathToFileURL(filePath).href))
-				.default as Event<keyof ClientEvents>;
+			const event = (await import(pathToFileURL(filePath).href)).default as Event<keyof ClientEvents>;
 			if (event.once) {
 				this.once(event.name, (...args) => event.execute(...args));
 			} else {

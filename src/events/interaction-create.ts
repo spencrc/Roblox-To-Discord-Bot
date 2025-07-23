@@ -9,9 +9,7 @@ import {
 import { client } from '../client.js';
 import { Event } from '../classes/event.js';
 
-const executeChatInputCommand = async (
-	interaction: ChatInputCommandInteraction<CacheType>
-): Promise<void> => {
+const executeChatInputCommand = async (interaction: ChatInputCommandInteraction<CacheType>): Promise<void> => {
 	const command = client.commands.get(interaction.commandName);
 
 	if (!command) {
@@ -37,9 +35,7 @@ const executeChatInputCommand = async (
 	}
 };
 
-const autocomplete = async (
-	interaction: AutocompleteInteraction<CacheType>
-): Promise<void> => {
+const autocomplete = async (interaction: AutocompleteInteraction<CacheType>): Promise<void> => {
 	const command = client.commands.get(interaction.commandName);
 
 	if (!command) {
@@ -57,8 +53,7 @@ const autocomplete = async (
 export default new Event({
 	name: Events.InteractionCreate,
 	execute: async (interaction: Interaction<CacheType>): Promise<void> => {
-		if (interaction.isChatInputCommand())
-			await executeChatInputCommand(interaction);
+		if (interaction.isChatInputCommand()) await executeChatInputCommand(interaction);
 		else if (interaction.isAutocomplete()) await autocomplete(interaction);
 	}
 });

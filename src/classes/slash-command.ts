@@ -12,12 +12,8 @@ type CommandBuilder =
 	| ContextMenuCommandBuilder
 	| SlashCommandSubcommandsOnlyBuilder
 	| SlashCommandOptionsOnlyBuilder;
-type CommandExecute = (
-	interaction: ChatInputCommandInteraction
-) => Promise<void> | void;
-type Autocomplete = (
-	interaction: AutocompleteInteraction
-) => Promise<void> | void;
+type CommandExecute = (interaction: ChatInputCommandInteraction) => Promise<void> | void;
+type Autocomplete = (interaction: AutocompleteInteraction) => Promise<void> | void;
 
 type CommandOptions = {
 	data: CommandBuilder;
