@@ -1,26 +1,19 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
 import { SlashCommand } from '../../classes/slash-command.js';
 import { ROBLOX_CLIENT_ID } from '../../config.js';
-import { createHash, randomBytes } from 'node:crypto';
-import { supabase } from '../../db/pg-pool.js';
+import { randomBytes } from 'node:crypto';
+import { supabase } from '../../db/supabase-client.js';
 
 const AUTHORIZE_URL = 'https://apis.roblox.com/oauth/v1/authorize?';
-
-const sha256 = (buffer: string): Buffer => {
-	return createHash('sha256').update(buffer).digest();
-};
 
 export default new SlashCommand({
 	data: new SlashCommandBuilder().setName('verify').setDescription('Replies with a verify link!'),
 	execute: async (interaction: ChatInputCommandInteraction): Promise<void> => {
-		const codeVerifier = randomBytes(32).toString('base64url');
-		const codeChallenge = sha256(codeVerifier).toString('base64url');
+		if (!interaction.inGuild()) return;
 		const state = randomBytes(10).toString('base64url');
 		const params = new URLSearchParams({
 			client_id: ROBLOX_CLIENT_ID,
-			code_challenge: codeChallenge,
-			code_challenge_method: 'S256',
-			redirect_uri: 'http://localhost:3000/redirect',
+			redirect_uri: 'https://woongles-verify.vercel.app/redirect',
 			scope: 'openid profile',
 			response_type: 'code',
 			state: state
@@ -29,8 +22,8 @@ export default new SlashCommand({
 
 		const { error } = await supabase.from(`roblox_oauth_sessions`).insert([
 			{
-				discord_user_id: interaction.user.id,
-				code_verifier: codeVerifier,
+				discord_id: interaction.user.id,
+				guild_id: interaction.guild?.id,
 				state: state
 			}
 		]);
