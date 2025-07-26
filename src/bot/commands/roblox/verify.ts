@@ -38,5 +38,5 @@ export default new SlashCommand({
 			]);
 
 		await interaction.reply(`Please click [here](<${link}>)!`);
-	} //todo: add state and code_challenge to a database to store them for use for /redirect
+	} 
 });

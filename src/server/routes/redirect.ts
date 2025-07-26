@@ -91,7 +91,6 @@ const revokeRefreshToken = async (refreshToken: string): Promise<void> => {
 	});
 };
 
-//todo: verify statecode
 export default router.get('/', async (req, res) => {
 	const code = req.query.code as string | undefined;
 	const state = req.query.state as string | undefined;
