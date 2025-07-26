@@ -27,16 +27,14 @@ export default new SlashCommand({
 		});
 		const link: string = `${AUTHORIZE_URL}${params.toString()}`;
 
-		await supabase
-			.from(`roblox_oauth_sessions`)
-			.insert([
-				{
-					discord_user_id: interaction.user.id,
-					code_verifier: codeVerifier,
-					state: state,
-				}
-			]);
+		await supabase.from(`roblox_oauth_sessions`).insert([
+			{
+				discord_user_id: interaction.user.id,
+				code_verifier: codeVerifier,
+				state: state
+			}
+		]);
 
 		await interaction.reply(`Please click [here](<${link}>)!`);
-	} 
+	}
 });

@@ -54,16 +54,16 @@ const consumeCodeVerifier = async (state: string): Promise<string> => {
 	const { data, error } = await supabase
 		.from('roblox_oauth_sessions')
 		.delete()
-		.match({state})
+		.match({ state })
 		.select(`code_verifier`)
-		.single()
+		.single();
 
 	if (error || !data) {
 		throw new ApiError(400, `Missing challenge code verifier!`);
 	}
 
 	return data.code_verifier as string;
-}
+};
 
 const getUserInfo = async (token: string): Promise<UserInfoResponse> => {
 	const response = await fetch(USER_INFO_URL, {
@@ -106,7 +106,7 @@ export default router.get('/', async (req, res) => {
 	const { access_token: accessToken, refresh_token: refreshToken } = await getToken(code, codeVerifier);
 
 	const { sub: userId } = await getUserInfo(accessToken);
-	console.log(userId);  
+	console.log(userId);
 
 	res.redirect('/');
 

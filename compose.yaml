@@ -1,6 +1,6 @@
 services:
   db:
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile.db
     image: postgres:16
