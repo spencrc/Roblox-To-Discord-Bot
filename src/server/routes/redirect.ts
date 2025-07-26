@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { ROBLOX_CLIENT_ID, ROBLOX_SECRET } from '../../config.js';
 import { ApiError } from '../errors/api-error.js';
-import { pool } from '../../db/pg-pool.js';
+import { supabase } from '../../db/pg-pool.js';
 
 const router = Router();
 
@@ -51,16 +51,18 @@ const getToken = async (code: string, challengeCodeVerifier: string): Promise<To
 };
 
 const consumeCodeVerifier = async (state: string): Promise<string> => {
-	const result = await pool.query(
-		`DELETE FROM roblox_oauth_sessions WHERE state = $1 RETURNING code_verifier`,
-		[state]
-	);
+	const { data, error } = await supabase
+		.from('roblox_oauth_sessions')
+		.delete()
+		.match({state})
+		.select(`code_verifier`)
+		.single()
 
-	if (result.rowCount === 0) {
+	if (error || !data) {
 		throw new ApiError(400, `Missing challenge code verifier!`);
 	}
 
-	return result.rows[0].code_verifier as string;
+	return data.code_verifier as string;
 }
 
 const getUserInfo = async (token: string): Promise<UserInfoResponse> => {
