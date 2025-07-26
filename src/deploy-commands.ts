@@ -1,5 +1,5 @@
 import { REST, Routes } from 'discord.js';
-import { DISCORD_CLIENT_ID, DISCORD_TOKEN } from '../config.js';
+import { DISCORD_CLIENT_ID, DISCORD_TOKEN } from './config.js';
 import { client } from './client.js';
 
 // Loads all commands

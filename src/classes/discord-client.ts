@@ -2,7 +2,7 @@ import { ActivityType, Client, ClientEvents, Collection, GatewayIntentBits } fro
 import { SlashCommand } from './slash-command.js';
 import { readdirSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
-import { DISCORD_TOKEN } from '../../config.js';
+import { DISCORD_TOKEN } from '../config.js';
 import { Event } from './event.js';
 
 export class DiscordClient extends Client {
@@ -25,8 +25,8 @@ export class DiscordClient extends Client {
 	}
 
 	public async load() {
-		const commandPath: string = './dist/bot/commands/';
-		const eventsPath: string = './dist/bot/events/';
+		const commandPath: string = './dist/commands/';
+		const eventsPath: string = './dist/events/';
 
 		for (const folder of readdirSync(commandPath)) {
 			const folderPath: string = commandPath + folder + '/';

@@ -20,12 +20,12 @@
 	"type": "module",
 	"scripts": {
 		"build": "tsc",
-		"start": "node dist/server.js",
+		"start": "node dist/bot.js",
 		"dev:build": "tsc --watch --incremental",
-		"dev:start": "nodemon dist/server.js",
+		"dev:start": "nodemon dist/bot.js",
 		"dev": "run-p dev:*",
-		"deploy": "node dist/bot/deploy-commands.js",
-		"undeploy": "node dist/bot/undeploy-commands.js",
+		"deploy": "node dist/deploy-commands.js",
+		"undeploy": "node dist/undeploy-commands.js",
 		"lint": "eslint src/",
 		"format": "prettier . --check",
 		"format:fix": "prettier . --write"

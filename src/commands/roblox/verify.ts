@@ -1,8 +1,8 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
 import { SlashCommand } from '../../classes/slash-command.js';
-import { ROBLOX_CLIENT_ID } from '../../../config.js';
+import { ROBLOX_CLIENT_ID } from '../../config.js';
 import { createHash, randomBytes } from 'node:crypto';
-import { supabase } from '../../../db/pg-pool.js';
+import { supabase } from '../../db/pg-pool.js';
 
 const AUTHORIZE_URL = 'https://apis.roblox.com/oauth/v1/authorize?';
 
@@ -27,13 +27,17 @@ export default new SlashCommand({
 		});
 		const link: string = `${AUTHORIZE_URL}${params.toString()}`;
 
-		await supabase.from(`roblox_oauth_sessions`).insert([
+		const { error } = await supabase.from(`roblox_oauth_sessions`).insert([
 			{
 				discord_user_id: interaction.user.id,
 				code_verifier: codeVerifier,
 				state: state
 			}
 		]);
+
+		if (error) {
+			console.error(error);
+		}
 
 		await interaction.reply(`Please click [here](<${link}>)!`);
 	}
