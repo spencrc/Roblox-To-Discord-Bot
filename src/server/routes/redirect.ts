@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { ROBLOX_CLIENT_ID, ROBLOX_SECRET } from '../config.js';
-import { ApiError } from '../classes/api-error.js';
-import { pool } from '../lib/redis-client.js';
+import { ROBLOX_CLIENT_ID, ROBLOX_SECRET } from '../../config.js';
+import { ApiError } from '../errors/api-error.js';
+import { pool } from '../../db/pg-pool.js';
 
 const router = Router();
 
@@ -50,6 +50,19 @@ const getToken = async (code: string, challengeCodeVerifier: string): Promise<To
 	return (await JSON.parse(text)) as TokenResponse;
 };
 
+const consumeCodeVerifier = async (state: string): Promise<string> => {
+	const result = await pool.query(
+		`DELETE FROM roblox_oauth_sessions WHERE state = $1 RETURNING code_verifier`,
+		[state]
+	);
+
+	if (result.rowCount === 0) {
+		throw new ApiError(400, `Missing challenge code verifier!`);
+	}
+
+	return result.rows[0].code_verifier as string;
+}
+
 const getUserInfo = async (token: string): Promise<UserInfoResponse> => {
 	const response = await fetch(USER_INFO_URL, {
 		headers: { Authorization: `Bearer ${token}` }
@@ -87,25 +100,14 @@ export default router.get('/', async (req, res) => {
 
 	console.log('Sucess! Re-direct page was reached!');
 
-	const codeVerifier = await pool.execute(async (client) => {
-		const value = await client.get(state);
-
-		if (value) await client.del(state);
-
-		return value;
-	});
-
-	if (!codeVerifier) {
-		throw new ApiError(400, `Missing challenge code verifier! It wasn't in the redis server?`);
-	}
+	const codeVerifier = await consumeCodeVerifier(state);
 
 	const { access_token: accessToken, refresh_token: refreshToken } = await getToken(code, codeVerifier);
 
-	res.status(200);
-	res.send('Success!');
-
 	const { sub: userId } = await getUserInfo(accessToken);
-	console.log(userId);
+	console.log(userId);  
+
+	res.redirect('/');
 
 	await revokeRefreshToken(refreshToken);
 });

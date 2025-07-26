@@ -1,8 +1,8 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
 import { SlashCommand } from '../../classes/slash-command.js';
-import { ROBLOX_CLIENT_ID } from '../../config.js';
+import { ROBLOX_CLIENT_ID } from '../../../config.js';
 import { createHash, randomBytes } from 'node:crypto';
-import { pool } from '../../lib/redis-client.js';
+import { pool } from '../../../db/pg-pool.js';
 
 const AUTHORIZE_URL = 'https://apis.roblox.com/oauth/v1/authorize?';
 
@@ -27,7 +27,14 @@ export default new SlashCommand({
 		});
 		const link: string = `${AUTHORIZE_URL}${params.toString()}`;
 
-		await pool.execute((client) => client.set(state, codeVerifier, { EX: 300 }));
+		await pool.query(
+			`INSERT INTO roblox_oauth_sessions(discord_user_id, code_verifier, state) VALUES (
+				$1,
+				$2,
+				$3
+			);`,
+			[interaction.user.id, codeVerifier, state]
+		)
 
 		await interaction.reply(`Please click [here](<${link}>)!`);
 	} //todo: add state and code_challenge to a database to store them for use for /redirect

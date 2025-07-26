@@ -6,6 +6,6 @@ export default new Event({
 	once: true,
 	execute: (client: Client) => {
 		const user: ClientUser = client.user as ClientUser;
-		console.log(`[DISCORD CLIENT] Ready! Logged in as ${user.tag}`);
+		console.log(`Ready! Logged in as ${user.tag}`);
 	}
 });

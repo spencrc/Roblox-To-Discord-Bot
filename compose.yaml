@@ -1,0 +1,40 @@
+services:
+  db:
+    build: 
+      context: .
+      dockerfile: Dockerfile.db
+    image: postgres:16
+    container_name: robloxverify-database
+    env_file: .env
+    hostname: localhost
+    ports: ['5432:5432']
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes: [postgres-data:/var/lib/postgresql/data]
+    restart: always
+    profiles: [db, app]
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: robloxverify-pgadmin
+    env_file: .env
+    depends_on: [db]
+    ports: ['5051:80']
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    restart: always
+    profiles: [db, app]
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.app
+    container_name: my-verify-app
+    env_file: .env
+    depends_on: [db]
+    environment: [POSTGRES_HOST=robloxverify-database]
+    restart: always
+    profiles: [app]
+
+volumes:
+  postgres-data:

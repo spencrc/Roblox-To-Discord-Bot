@@ -1,0 +1,12 @@
+# Folders that will get installed when building the Docker container.
+/node_modules
+# Folders that always exist, but shouldn't be in our container.
+/src
+/.git
+# Files that always exist, but shouldn't be in our container.
+.gitignore
+.env
+tsconfig.tsbuildinfo
+eslint.config.mjs
+.prettierrc
+.prettieringore
