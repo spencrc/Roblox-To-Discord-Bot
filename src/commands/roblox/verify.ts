@@ -1,6 +1,6 @@
-import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js';
+import { ChatInputCommandInteraction, MessageFlags, SlashCommandBuilder } from 'discord.js';
 import { SlashCommand } from '../../classes/slash-command.js';
-import { ROBLOX_CLIENT_ID } from '../../config.js';
+import { BASE_URL, ROBLOX_CLIENT_ID } from '../../config.js';
 import { randomBytes } from 'node:crypto';
 import { supabase } from '../../db/supabase-client.js';
 
@@ -10,10 +10,11 @@ export default new SlashCommand({
 	data: new SlashCommandBuilder().setName('verify').setDescription('Replies with a verify link!'),
 	execute: async (interaction: ChatInputCommandInteraction): Promise<void> => {
 		if (!interaction.inGuild()) return;
+
 		const state = randomBytes(10).toString('base64url');
 		const params = new URLSearchParams({
 			client_id: ROBLOX_CLIENT_ID,
-			redirect_uri: 'https://woongles-verify.vercel.app/redirect',
+			redirect_uri: `${BASE_URL}/redirect`,
 			scope: 'openid profile',
 			response_type: 'code',
 			state: state
@@ -32,6 +33,9 @@ export default new SlashCommand({
 			console.error(error);
 		}
 
-		await interaction.reply(`Please click [here](<${link}>)!`);
+		await interaction.reply({
+			content: `Please click [here](<${link}>)!`,
+			flags: MessageFlags.Ephemeral
+		});
 	}
 });
