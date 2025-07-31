@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, MessageFlags, SlashCommandBuilder } from 'discord.js';
+import { ChatInputCommandInteraction, MessageFlags, SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import { SlashCommand } from '../../classes/slash-command.js';
 import { BASE_URL, ROBLOX_CLIENT_ID } from '../../config.js';
 import { randomBytes } from 'node:crypto';
@@ -33,8 +33,18 @@ export default new SlashCommand({
 			console.error(error);
 		}
 
+		const embed = new EmbedBuilder()
+			.setColor(0x0099FF)
+			.setTitle('Verify Your Roblox Account')
+			.setDescription(`
+				To verify your Roblox Account, please visit [here](<${link}>)
+				
+				Once you have verified your account, you will receive a notification.
+			`)
+			.setTimestamp();
+
 		await interaction.reply({
-			content: `Please click [here](<${link}>)!`,
+			embeds: [embed],
 			flags: MessageFlags.Ephemeral
 		});
 	}
