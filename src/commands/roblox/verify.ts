@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction, MessageFlags, SlashCommandBuilder, EmbedBuilder } from 'discord.js';
+import { ChatInputCommandInteraction, MessageFlags, SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle } from 'discord.js';
 import { SlashCommand } from '../../classes/slash-command.js';
 import { BASE_URL, ROBLOX_CLIENT_ID } from '../../config.js';
 import { randomBytes } from 'node:crypto';
@@ -45,8 +45,16 @@ export default new SlashCommand({
 			)
 			.setTimestamp();
 
+		const button = new ButtonBuilder()
+			.setStyle(ButtonStyle.Link)
+			.setLabel('Verify')
+			.setURL(link);
+		const row = new ActionRowBuilder<ButtonBuilder>()
+			.setComponents(button);
+
 		await interaction.reply({
 			embeds: [embed],
+			components: [row],
 			flags: MessageFlags.Ephemeral
 		});
 	}

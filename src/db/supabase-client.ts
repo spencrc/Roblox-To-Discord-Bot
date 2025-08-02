@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { SUPABASE_URL, SUPABASE_KEY } from '../config.js';
 import { client } from '../client.js';
-import { EmbedBuilder } from 'discord.js';
+import { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } from 'discord.js';
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -30,18 +30,28 @@ const callback = async (payload: PostgresChanges): Promise<void> => {
 		const verify_log_channel_id = data.verify_log_channel_id as string | null;
 		if (verify_log_channel_id != null) {
 			const channel = guild.channels.cache.get(verify_log_channel_id)!;
+			const link = `https://www.roblox.com/users/${roblox_id}/profile`;
 			const embed = new EmbedBuilder()
 				.setColor(0x22bb33)
 				.setTitle('Verified Roblox Account')
 				.setDescription(`
 					<@${discord_id}> your Roblox account was sucessfully verified!
 					
-					Want to see your profile? You can visit it [here](<https://www.roblox.com/users/${roblox_id}/profile>)!
+					Want to see your profile? You can visit it [here](<${link}>)!
 					`
 				)
 				.setTimestamp();
+			const button = new ButtonBuilder()
+				.setStyle(ButtonStyle.Link)
+				.setLabel('Profile')
+				.setURL(link);
+			const row = new ActionRowBuilder<ButtonBuilder>()
+				.setComponents(button);
 			if (channel.isTextBased()) {
-				await channel.send({embeds: [embed]});
+				await channel.send({
+					embeds: [embed], 
+					components: [row]
+				});
 			}
 		}
 	}
