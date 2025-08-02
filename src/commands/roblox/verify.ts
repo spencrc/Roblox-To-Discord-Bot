@@ -34,13 +34,15 @@ export default new SlashCommand({
 		}
 
 		const embed = new EmbedBuilder()
-			.setColor(0x0099FF)
+			.setColor(0x0099ff)
 			.setTitle('Verify Your Roblox Account')
-			.setDescription(`
+			.setDescription(
+				`
 				To verify your Roblox Account, please visit [here](<${link}>)
 				
 				Once you have verified your account, you will receive a notification.
-			`)
+			`
+			)
 			.setTimestamp();
 
 		await interaction.reply({
