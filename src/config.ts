@@ -10,4 +10,6 @@ export const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID!;
 
 export const ROBLOX_CLIENT_ID = process.env.ROBLOX_CLIENT_ID!;
 
+export const ROBLOX_API_KEY = process.env.ROBLOX_API_KEY!;
+
 export const BASE_URL = process.env.BASE_URL!;
