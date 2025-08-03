@@ -2,12 +2,31 @@ import { ChatInputCommandInteraction, EmbedBuilder, MessageFlags, PermissionFlag
 import { SlashCommand } from '../../classes/slash-command.js';
 import { supabase } from '../../db/supabase-client.js';
 
+const unsetChannel = async (interaction: ChatInputCommandInteraction, guildId: string): Promise<void> => {
+    const { error } = await supabase.from('settings').delete().match({ guild_id: guildId })
+
+    if (error) {
+        console.error(error);
+    }
+
+    const embed = new EmbedBuilder()
+        .setColor(0x22bb33)
+        .setTitle('Sucessfully Unset Verify Log Channel')
+        .setDescription('The verify log channel was successfully **unset**!')
+        .setTimestamp();
+
+    await interaction.reply({
+        embeds: [embed],
+        flags: MessageFlags.Ephemeral
+    });
+}
+
 export default new SlashCommand({
     data: new SlashCommandBuilder()
         .setName("set-verifylog")
         .setDescription('Sets the channel to send verify logs to!')
-        .addStringOption((option) =>
-            option.setName('channel').setDescription('The channel name').setRequired(true)
+        .addChannelOption((option) =>
+            option.setName('channel').setDescription('The channel name')
         )
         .addBooleanOption((option) =>
             option.setName('none').setDescription('Unsets the verify log channel if it exists, meaning verify messages won\'t be sent anywhere')
@@ -17,38 +36,47 @@ export default new SlashCommand({
         if (!interaction.inGuild()) return;
 
         const guild = interaction.guild!;
-        const channelName = interaction.options.getString('channel', true);
+        const guildId = guild.id;
+        const channel = interaction.options.getChannel('channel');
         const unsetBoolean = interaction.options.getBoolean('none');
-        const channel = guild.channels.cache.find(channel => channel.name === channelName);
-        
-        if (!channel) return;
-        
-        if (channel.isTextBased()) {
-            if (unsetBoolean === false) {
-                return;
-            } else {
-                const { error } = await supabase.from(`settings`).upsert([
-                    {
-                        guild_id: guild.id,
-                        verify_log_channel_id: channel.id
-                    }
-                ]);
-        
-                if (error) {
-                    console.error(error);
+
+        if (unsetBoolean === true) await unsetChannel(interaction, guildId);
+        else if (channel && 'send' in channel) {
+            const { error } = await supabase.from(`settings`).upsert([
+                {
+                    guild_id: guildId,
+                    verify_log_channel_id: channel.id
                 }
-
-                const embed = new EmbedBuilder()
-                    .setColor(0x22bb33)
-                    .setTitle('Sucessfully Set Verify Log Channel')
-                    .setDescription(`The verify log channel was successfully set to be <#${channel.id}>!`)
-                    .setTimestamp();
-
-                await interaction.reply({
-                    embeds: [embed],
-                    flags: MessageFlags.Ephemeral
-                });
+            ]);
+    
+            if (error) {
+                console.error(error);
             }
+
+            const embed = new EmbedBuilder()
+                .setColor(0x22bb33)
+                .setTitle('Sucessfully Set Verify Log Channel')
+                .setDescription(`The verify log channel was successfully set to be <#${channel.id}>!`)
+                .setTimestamp();
+
+            await interaction.reply({
+                embeds: [embed],
+                flags: MessageFlags.Ephemeral
+            });
+        } else {
+            const embed = new EmbedBuilder()
+                .setColor(0xbb2124)
+                .setTitle('Error When Setting Verify Log Channel')
+                .setDescription(`
+                    Sorry, we could not set the verify log channel! Here's some questions to consider when resolving this error:
+                    - Did you use the command with either the \`channel\` or \`none\` (which can only be True) options?\n- Did you pick a channel that can receive messages for \`channel\`?
+                `)
+                .setTimestamp();
+
+            await interaction.reply({
+                embeds: [embed],
+                flags: MessageFlags.Ephemeral
+            });
         }
     }
 })
