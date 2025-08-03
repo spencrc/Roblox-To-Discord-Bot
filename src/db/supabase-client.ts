@@ -22,11 +22,12 @@ const callback = async (payload: PostgresChanges): Promise<void> => {
 		.from('settings')
 		.select('verify_log_channel_id')
 		.match({ guild_id })
-		.single();
+		.maybeSingle();
 
 	if (error) {
   		console.error('Error fetching verify_log_channel_id:', error);
 	} else {
+		if (!data) return;
 		const verify_log_channel_id = data.verify_log_channel_id as string | null;
 		if (verify_log_channel_id != null) {
 			const channel = guild.channels.cache.get(verify_log_channel_id)!;
