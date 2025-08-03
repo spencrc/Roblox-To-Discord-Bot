@@ -6,7 +6,8 @@ import { DISCORD_TOKEN } from '../config.js';
 import { Event } from './event.js';
 
 export class DiscordClient extends Client {
-	public commands: Collection<string, SlashCommand> = new Collection();
+	public commands = new Collection<string, SlashCommand>();
+	public cooldowns = new Collection<string, Collection<string, number>>();
 
 	constructor() {
 		super({
@@ -24,9 +25,8 @@ export class DiscordClient extends Client {
 		});
 	}
 
-	public async load() {
+	public async loadCommands() {
 		const commandPath: string = './dist/commands/';
-		const eventsPath: string = './dist/events/';
 
 		for (const folder of readdirSync(commandPath)) {
 			const folderPath: string = commandPath + folder + '/';
@@ -39,6 +39,11 @@ export class DiscordClient extends Client {
 			}
 		}
 
+		
+	}
+
+	public async loadEvents() {
+		const eventsPath: string = './dist/events/';
 		for (const file of readdirSync(eventsPath).filter((file) => file.endsWith('.js'))) {
 			const filePath: string = eventsPath + file;
 			const event = (await import(pathToFileURL(filePath).href)).default as Event<keyof ClientEvents>;
@@ -53,7 +58,8 @@ export class DiscordClient extends Client {
 
 	public async start() {
 		// Load all commands and events
-		await this.load();
+		await this.loadCommands();
+		await this.loadEvents();
 		// Login to Discord with your client's token
 		await this.login(DISCORD_TOKEN);
 	}

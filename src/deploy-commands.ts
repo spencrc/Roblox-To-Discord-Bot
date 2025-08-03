@@ -3,7 +3,7 @@ import { DISCORD_CLIENT_ID, DISCORD_TOKEN } from './config.js';
 import { client } from './client.js';
 
 // Loads all commands
-await client.load();
+await client.loadCommands();
 
 const rest: REST = new REST().setToken(DISCORD_TOKEN);
 
@@ -19,8 +19,12 @@ await (async () => {
 		});
 
 		console.log(`Successfully reloaded application (/) commands.`);
+
+		process.exit(0); 
 	} catch (error) {
 		// And of course, make sure you catch and log any errors!
 		console.error(error);
+		process.exit(1); 
 	}
 })();
+
