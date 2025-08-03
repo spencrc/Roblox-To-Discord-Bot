@@ -7,6 +7,7 @@ import { supabase } from '../../db/supabase-client.js';
 const AUTHORIZE_URL = 'https://apis.roblox.com/oauth/v1/authorize?';
 
 export default new SlashCommand({
+	cooldown: 60,
 	data: new SlashCommandBuilder().setName('verify').setDescription('Replies with a verify link!'),
 	execute: async (interaction: ChatInputCommandInteraction): Promise<void> => {
 		if (!interaction.inGuild()) return;
