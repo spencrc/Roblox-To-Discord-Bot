@@ -26,13 +26,16 @@ const executeChatInputCommand = async (interaction: ChatInputCommandInteraction<
 
 		const now = Date.now();
 		const timestamps = cooldowns.get(command.data.name)!;
-		
+
 		if (timestamps.has(interaction.user.id)) {
 			const expiryTime = timestamps.get(interaction.user.id)! + cooldown * 1000;
 
 			if (now < expiryTime) {
 				const expiredTimestamp = Math.round(expiryTime / 1000);
-				await interaction.reply({ content: `Please wait, you are on a cooldown for \`${command.data.name}\`. You can use it again <t:${expiredTimestamp}:R>.`, flags: MessageFlags.Ephemeral });
+				await interaction.reply({
+					content: `Please wait, you are on a cooldown for \`${command.data.name}\`. You can use it again <t:${expiredTimestamp}:R>.`,
+					flags: MessageFlags.Ephemeral
+				});
 				return;
 			}
 		}

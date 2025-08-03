@@ -18,14 +18,14 @@ interface PostgresChanges {
 const callback = async (payload: PostgresChanges): Promise<void> => {
 	const { discord_id, guild_id, roblox_id } = payload.new;
 	const guild = client.guilds.cache.get(guild_id!)!;
-	const { data, error} = await supabase
+	const { data, error } = await supabase
 		.from('settings')
 		.select('verify_log_channel_id')
 		.match({ guild_id })
 		.maybeSingle();
 
 	if (error) {
-  		console.error('Error fetching verify_log_channel_id:', error);
+		console.error('Error fetching verify_log_channel_id:', error);
 	} else {
 		if (!data) return;
 		const verify_log_channel_id = data.verify_log_channel_id as string | null;
@@ -35,28 +35,24 @@ const callback = async (payload: PostgresChanges): Promise<void> => {
 			const embed = new EmbedBuilder()
 				.setColor(0x22bb33)
 				.setTitle('Verified Roblox Account')
-				.setDescription(`
+				.setDescription(
+					`
 					<@${discord_id}> your Roblox account was sucessfully verified!
 					
 					Want to see your profile? You can visit it [here](<${link}>)!
 					`
 				)
 				.setTimestamp();
-			const button = new ButtonBuilder()
-				.setStyle(ButtonStyle.Link)
-				.setLabel('Profile')
-				.setURL(link);
-			const row = new ActionRowBuilder<ButtonBuilder>()
-				.setComponents(button);
+			const button = new ButtonBuilder().setStyle(ButtonStyle.Link).setLabel('Profile').setURL(link);
+			const row = new ActionRowBuilder<ButtonBuilder>().setComponents(button);
 			if (channel.isTextBased()) {
 				await channel.send({
-					embeds: [embed], 
+					embeds: [embed],
 					components: [row]
 				});
 			}
 		}
 	}
-
 };
 
 supabase

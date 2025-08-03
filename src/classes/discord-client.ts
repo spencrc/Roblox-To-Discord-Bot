@@ -38,8 +38,6 @@ export class DiscordClient extends Client {
 				console.log('Loaded new command:', file);
 			}
 		}
-
-		
 	}
 
 	public async loadEvents() {

@@ -20,11 +20,10 @@ await (async () => {
 
 		console.log(`Successfully reloaded application (/) commands.`);
 
-		process.exit(0); 
+		process.exit(0);
 	} catch (error) {
 		// And of course, make sure you catch and log any errors!
 		console.error(error);
-		process.exit(1); 
+		process.exit(1);
 	}
 })();
-
