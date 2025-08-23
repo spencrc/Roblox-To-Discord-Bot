@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { SUPABASE_URL, SUPABASE_KEY } from '../config.js';
 import { client } from '../client.js';
-import { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } from 'discord.js';
+import { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, GuildBasedChannel } from 'discord.js';
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -30,7 +30,11 @@ const callback = async (payload: PostgresChanges): Promise<void> => {
 		if (!data) return;
 		const verify_log_channel_id = data.verify_log_channel_id as string | null;
 		if (verify_log_channel_id != null) {
-			const channel = guild.channels.cache.get(verify_log_channel_id)!;
+			const channel = guild.channels.cache.get(verify_log_channel_id) as GuildBasedChannel | null;
+			if (channel == null) {
+				console.error('Channel does not exist:', error);
+				return
+			}
 			const link = `https://www.roblox.com/users/${roblox_id}/profile`;
 			const embed = new EmbedBuilder()
 				.setColor(0x22bb33)
