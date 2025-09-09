@@ -52,3 +52,20 @@ The bot comes with a few different scripts defined in `package.json`:
 - `npm run lint`: runs ESLint for best coding practices.
 - `npm run format`: runs Prettier to highlight inconsistencies in formatting.
 - `npm run format:fix`: runs Prettier to fix all inconsistencies in formatting.
+
+## Database Setup
+
+Please create the following tables with the following columns:
+
+- `roblox_discord_links`
+  - `discord_id`: text (primary key)
+  - `guild_id`: text
+  - `roblox_id`: text
+- `roblox_oauth_sessions`
+  - `state`: text (primary key)
+  - `discord_id`: text
+  - `expires_at`: timestamp
+  - `guild_id`: text
+- `settings`
+  - `guild_id`: text (primary key)
+  - `verify_log_channel_id`: text
