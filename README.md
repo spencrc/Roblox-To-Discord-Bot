@@ -30,11 +30,11 @@ The following commands are available:
 5. Create an API Key on ROBLOX. No permissions are required.
 6. Create a project on Supabase.
 7. Obtain your `.env` variables:
-  - `SUPABASE_URL` and `SUPABASE_KEY` can be found on the initial page of your new Supabase project. They can also be found under Project Settings.
-  - `DISCORD_TOKEN` and `DISCORD_CLIENT_ID` can be found on the page for your new Discord application. The client id will be located under the General Information tab, under Application Id. The token will be located under the Bot tab.
-  - `ROBLOX_CLIENT_ID` will be located on the page for your new ROBLOX OAuth 2.0 app.
-  - `ROBLOX_API_KEY` will be located on the page for your new ROBLOX API Key.
-  - `BASE_URL will` be whatever your want it to be! It should be the website served by [Roblox-Verify-Backend](https://github.com/spencrc/Roblox-Verify-Backend), either locally or hosted.
+      - `SUPABASE_URL` and `SUPABASE_KEY` can be found on the initial page of your new Supabase project. They can also be found under Project Settings.
+      - `DISCORD_TOKEN` and `DISCORD_CLIENT_ID` can be found on the page for your new Discord application. The client id will be located under the General Information tab, under Application Id. The token will be located under the Bot tab.
+      - `ROBLOX_CLIENT_ID` will be located on the page for your new ROBLOX OAuth 2.0 app.
+      - `ROBLOX_API_KEY` will be located on the page for your new ROBLOX API Key.
+      - `BASE_URL will` be whatever your want it to be! It should be the website served by [Roblox-Verify-Backend](https://github.com/spencrc/Roblox-Verify-Backend), either locally or hosted.
 8. Install packages by running `npm i` in the project's folder.
 9. Add your bot to your server. Instructions are here: [Adding your bot to servers](https://discordjs.guide/preparations/adding-your-bot-to-servers.html)
 10. Register the slash commands in your guild by running `npm run deploy`.
@@ -57,7 +57,7 @@ The bot comes with a few different scripts defined in `package.json`:
 
 Please create the following tables with the following columns:
 
-- `roblox_discord_links`
+- `roblox_discord_links` (realtime)
   - `discord_id`: text (primary key)
   - `guild_id`: text
   - `roblox_id`: text
