@@ -10,7 +10,7 @@ import {
 import { SlashCommand } from '../../classes/slash-command.js';
 import { BASE_URL, ROBLOX_CLIENT_ID } from '../../config.js';
 import { randomBytes } from 'node:crypto';
-import { supabase } from '../../db/supabase-client.js';
+import supabase from '../../db/supabase.js';
 
 const AUTHORIZE_URL = 'https://apis.roblox.com/oauth/v1/authorize?';
 

@@ -7,7 +7,7 @@ import {
 	SlashCommandBuilder
 } from 'discord.js';
 import { SlashCommand } from '../../classes/slash-command.js';
-import { supabase } from '../../db/supabase-client.js';
+import supabase from '../../db/supabase.js';
 import { getUser, getUserThumbnail } from '../../lib/user.js';
 
 export default new SlashCommand({

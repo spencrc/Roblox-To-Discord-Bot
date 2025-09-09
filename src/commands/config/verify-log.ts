@@ -6,7 +6,7 @@ import {
 	SlashCommandBuilder
 } from 'discord.js';
 import { SlashCommand } from '../../classes/slash-command.js';
-import { supabase } from '../../db/supabase-client.js';
+import supabase from '../../db/supabase.js';
 
 const unsetChannel = async (interaction: ChatInputCommandInteraction, guildId: string): Promise<void> => {
 	const { error } = await supabase.from('settings').delete().match({ guild_id: guildId });
