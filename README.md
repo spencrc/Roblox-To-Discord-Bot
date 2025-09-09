@@ -1,4 +1,4 @@
-# Roblox-Verify-Bot
+# Roblox-To-Discord-Bot
 
 [![discord.js](https://img.shields.io/badge/discord.js-%5E14.21.0-blue)](https://discord.js.org/)
 
@@ -34,7 +34,7 @@ The following commands are available:
       - `DISCORD_TOKEN` and `DISCORD_CLIENT_ID` can be found on the page for your new Discord application. The client id will be located under the General Information tab, under Application Id. The token will be located under the Bot tab.
       - `ROBLOX_CLIENT_ID` will be located on the page for your new ROBLOX OAuth 2.0 app.
       - `ROBLOX_API_KEY` will be located on the page for your new ROBLOX API Key.
-      - `BASE_URL will` be whatever your want it to be! It should be the website served by [Roblox-Verify-Backend](https://github.com/spencrc/Roblox-Verify-Backend), either locally or hosted.
+      - `BASE_URL will` be whatever your want it to be! It should be the website served by [Roblox-To-Discord-Backend](https://github.com/spencrc/Roblox-To-Discord-Backend), either locally or hosted.
 8. Install packages by running `npm i` in the project's folder.
 9. Add your bot to your server. Instructions are here: [Adding your bot to servers](https://discordjs.guide/preparations/adding-your-bot-to-servers.html)
 10. Register the slash commands in your guild by running `npm run deploy`.
