@@ -1,6 +1,6 @@
 # Roblox-Verify-Bot
 
-[![discord.js](https://img.shields.io/github/package-json/dependency-version/KevinNovak/Discord-Bot-TypeScript-Template/discord.js)](https://discord.js.org/)
+[![discord.js](https://img.shields.io/badge/discord.js-%5E14.21.0-blue)](https://discord.js.org/)
 
 ## Commands
 
