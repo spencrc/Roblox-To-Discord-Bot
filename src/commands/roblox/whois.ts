@@ -4,6 +4,7 @@ import {
 	ButtonStyle,
 	ChatInputCommandInteraction,
 	EmbedBuilder,
+	GuildMember,
 	SlashCommandBuilder
 } from 'discord.js';
 import { SlashCommand } from '../../classes/slash-command.js';
@@ -18,12 +19,12 @@ export default new SlashCommand({
 	execute: async (interaction: ChatInputCommandInteraction): Promise<void> => {
 		if (!interaction.inGuild()) return;
 		const guild = interaction.guild!;
-		const user = interaction.user;
+		const member = interaction.options.getMember('user') as GuildMember;
 
 		const { data, error } = await supabase
 			.from('roblox_discord_links')
 			.select('roblox_id')
-			.match({ guild_id: guild.id, discord_id: user.id })
+			.match({ guild_id: guild.id, discord_id: member.id })
 			.maybeSingle();
 
 		if (error) {
@@ -41,7 +42,7 @@ export default new SlashCommand({
 		const link = `https://www.roblox.com/users/${robloxId}/profile`;
 		const embed = new EmbedBuilder()
 			.setColor(0x22bb33)
-			.setTitle(user.displayName)
+			.setTitle(member.displayName)
 			.setDescription(robloxUser.about)
 			.setFields(
 				{ name: 'Roblox username', value: robloxUser.name, inline: true },
